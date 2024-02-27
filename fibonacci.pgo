@@ -17,27 +17,27 @@ keywords are not case sensitive, varnames and labels are.
 
 goto main; // every program has an entry point with the main label
 
-lbl main;
+main:
 print "Enter a number n to get the nth term of the fibonacci sequence";
 set n to num(input);
 if not is_num(n) then goto not_int_err;
 if n<0 then goto neg_err;
 goto fibonacci;
 
-lbl not_int_err;
+not_int_err:
 print "Error: you did not input a number";
 goto main;
 
-lbl neg_err;
+neg_err:
 print "Error: negative value";
 goto main;
 
 
-lbl fibonacci;
+fibonacci:
 if n<=1 then goto end;
 set n to (n-1) + (n-2);
 goto fibonacci; 
 
-lbl end;
+end:
 print "The nth fibonacci number is:";
 print n;
