@@ -17,10 +17,9 @@ keywords are not case sensitive, varnames and labels are.
 
 goto main; // every program has an entry point with the main label
 
-main:
+main: // main label
 print "Enter a number n to get the nth term of the fibonacci sequence";
-set n to num(input);
-if not is_num(n) then goto not_int_err;
+set n to input as num; // use "as" for typecasting
 if n<0 then goto neg_err;
 goto fibonacci;
 
