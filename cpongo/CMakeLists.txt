@@ -3,4 +3,5 @@ project(cpongo C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(cpongo main.c)
+add_executable(cpongo main.c
+        common.h)
