@@ -7,10 +7,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-char* readfile(const char* filepath);
+char* read_file(const char* filepath);
 // just for file reading, keeping it in the scope of this file only
 
-char** splittext(const char *text, int *num_strings);
+char** split_text(const char *text, int *num_strings);
 // split text into array of substrings split on delimiter ;
 // may need to update for goto labels which end in : ^^^
 
@@ -18,7 +18,7 @@ char** remove_comments(char **strings, int numStrings, int *newNumStrings);
 // remove comments denoted by "rem" from the array of substrings
 // (needs review)
 
-char* readfile(const char* filepath) {
+char* read_file(const char* filepath) {
     FILE *file;
     char *text = NULL;
     long length;
@@ -52,7 +52,7 @@ char* readfile(const char* filepath) {
     return text;
 }
 
-char** splittext(const char *text, int *num_strings) {
+char** split_text(const char *text, int *num_strings) {
     int count = 1; // count number of statements using delimiter ;
     const char *ptr = text;
     while (*ptr != '\0') {
