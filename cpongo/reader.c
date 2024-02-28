@@ -1,10 +1,13 @@
 //
-// Created by Lenovo on 2/27/2024.
+// Created by Tre on 2/27/2024.
 //
 
 #include "reader.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+char* readfile(const char* filepath);
+// just for file reading, keeping it in the scope of this file only
 
 char* readfile(const char* filepath) {
     FILE *file;
@@ -15,7 +18,7 @@ char* readfile(const char* filepath) {
 
     // check if file opened successfully
     if (file == NULL) {
-        printf("Failed to open file.\n");
+        printf("Failed to open file at location %s\n", filepath);
         return NULL; // function failed
     }
 
@@ -27,7 +30,7 @@ char* readfile(const char* filepath) {
     // allocate memory to store text
     text = (char*) malloc(length * sizeof(char));
     if (text == NULL) {
-        printf("Memory allocation failed.\n");
+        printf("Memory allocation failed for file %s\n", filepath);
         fclose(file);
         return NULL;
     }
