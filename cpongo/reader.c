@@ -11,6 +11,12 @@ char* readfile(const char* filepath);
 // just for file reading, keeping it in the scope of this file only
 
 char** splittext(const char *text, int *num_strings);
+// split text into array of substrings split on delimiter ;
+// may need to update for goto labels which end in : ^^^
+
+char** remove_comments(char **strings, int numStrings, int *newNumStrings);
+// remove comments denoted by "rem" from the array of substrings
+// (needs review)
 
 char* readfile(const char* filepath) {
     FILE *file;
@@ -114,6 +120,7 @@ char** splittext(const char *text, int *num_strings) {
     return strings;
 }
 
+// left off here, need to go through this code VVV
 char** remove_comments(char **strings, int numStrings, int *newNumStrings) {
     // Allocate memory for the new array of strings
     char **newStrings = (char**)malloc(numStrings * sizeof(char*));
