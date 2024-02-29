@@ -12,9 +12,9 @@ char* read_file(const char* filepath);
 
 char** split_text(const char *text, int *num_strings);
 // split text into array of substrings split on delimiter ;
-// may need to update for goto labels which end in : ^^^
+// may need to update for goto labels which end in : ^^^ (this should be complete now)
 
-char** remove_comments(char **strings, int numStrings, int *newNumStrings);
+char** remove_comments(char **strings, int num_strings, int *new_num_strings);
 // remove comments denoted by "rem" from the array of substrings
 // (needs review)
 
@@ -56,7 +56,7 @@ char** split_text(const char *text, int *num_strings) {
     int count = 1; // count number of statements using delimiter ;
     const char *ptr = text;
     while (*ptr != '\0') {
-        if (*ptr == ';') {
+        if (*ptr == ';' || *ptr == ':') { // added checking for :
             count++;
         }
         ptr++;
@@ -75,7 +75,7 @@ char** split_text(const char *text, int *num_strings) {
 
     // split into substrings
     while (*text != '\0') {
-        if (*text == ';') {
+        if (*text == ';' || *text == ':') { // added checking for :
             // memory for string
             strings[i] = (char*) malloc((text - start + 1) * sizeof(char));
             if (strings[i] == NULL) {
@@ -121,59 +121,60 @@ char** split_text(const char *text, int *num_strings) {
 }
 
 // left off here, need to go through this code VVV
-char** remove_comments(char **strings, int numStrings, int *newNumStrings) {
-    // Allocate memory for the new array of strings
-    char **newStrings = (char**)malloc(numStrings * sizeof(char*));
-    if (newStrings == NULL) {
-        printf("Memory allocation failed.\n");
+char** remove_comments(char **strings, int num_strings, int *new_num_strings) {
+    // malloc for new string array
+    char **new_strings = (char**)malloc(num_strings * sizeof(char*));
+    if (new_strings == NULL) {
+        printf("Memory allocation failed for remove_comments output.\n");
         return NULL;
     }
 
-    int count = 0; // Counter for the new number of strings
+    int count = 0; // counter for new number of strings
 
-    // Iterate through the original array of strings
-    for (int i = 0; i < numStrings; i++) {
-        // Check if the substring contains the keyword "rem"
+    // iter through the original array of strings
+    for (int i = 0; i < num_strings; i++) {
+        // check if substring contains "rem"
         char *keyword = strstr(strings[i], "rem");
         if (keyword != NULL) {
-            // Check if the substring starts with the keyword "rem"
+            // if starts with rem
             if (keyword == strings[i]) {
-                // Skip this string by not copying it to the new array
+                // don't copy to arr
                 continue;
             } else {
-                // Copy the substring up to the keyword "rem" to the new array
-                newStrings[count] = (char*)malloc((keyword - strings[i] + 1) * sizeof(char));
-                if (newStrings[count] == NULL) {
-                    printf("Memory allocation failed.\n");
-                    // Free allocated memory
+                // copy everything before keyword "rem" to new array
+                new_strings[count] = (char*) malloc((keyword - strings[i] + 1) * sizeof(char));
+                if (new_strings[count] == NULL) {
+                    printf("Memory allocation failed after comment removal.\n");
+                    // freeup
                     for (int j = 0; j < count; j++) {
-                        free(newStrings[j]);
+                        free(new_strings[j]);
                     }
-                    free(newStrings);
+                    free(new_strings);
                     return NULL;
                 }
-                strncpy(newStrings[count], strings[i], keyword - strings[i]);
-                newStrings[count][keyword - strings[i]] = '\0'; // Null-terminate the string
+                strncpy(new_strings[count], strings[i], keyword - strings[i]);
+                new_strings[count][keyword - strings[i]] = '\0'; // null-terminate
                 count++;
             }
         } else {
-            // Copy the entire substring to the new array
-            newStrings[count] = (char*)malloc((strlen(strings[i]) + 1) * sizeof(char));
-            if (newStrings[count] == NULL) {
-                printf("Memory allocation failed.\n");
-                // Free allocated memory
+            // copy entire substring to new array
+            new_strings[count] = (char*)malloc((strlen(strings[i]) + 1) * sizeof(char));
+            if (new_strings[count] == NULL) {
+                printf("Memory allocation failed in remove_comments array copy.\n");
+                // freeup
                 for (int j = 0; j < count; j++) {
-                    free(newStrings[j]);
+                    free(new_strings[j]);
                 }
-                free(newStrings);
+                free(new_strings);
                 return NULL;
             }
-            strcpy(newStrings[count], strings[i]);
+            strcpy(new_strings[count], strings[i]);
+            // TODO: look into memory safety of this ^^
             count++;
         }
     }
 
-    *newNumStrings = count; // Set the new number of strings
+    *new_num_strings = count; // set new number of strings
 
-    return newStrings;
+    return new_strings;
 }
